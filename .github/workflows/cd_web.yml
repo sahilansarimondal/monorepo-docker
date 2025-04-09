@@ -21,6 +21,8 @@
         with:
           context: .
           file: ./docker/Dockerfile.web
+          build-args: 
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/monorepo-web:${{ github.sha }}
 

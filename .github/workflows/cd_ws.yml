@@ -25,4 +25,16 @@
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/monorepo-websoket:${{ github.sha }}
 
     # steps to deploy to a vm
+      - name: Set up SSH
+        run: |
+          echo "${{ secrets.GCP_SSH_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Deploy to Production vm
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.GCP_USER }}@${{ secrets.GCP_HOST }} << 'EOF'
+            docker stop monorepo-websoket || true
+            docker rm monorepo-websoket || true
+            docker run -d --name monorepo-websoket -p 8081:8081 ${{ secrets.DOCKERHUB_USERNAME }}/monorepo-websoket:${{ github.sha }}
+          EOF
      
