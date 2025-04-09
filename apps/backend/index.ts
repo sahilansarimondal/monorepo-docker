@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.send("Hello from backend!");
+    res.send("Hello from backend! Deployed on GCP");
 });
 
 app.get("/users", async (req, res) => {
