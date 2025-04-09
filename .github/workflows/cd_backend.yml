@@ -25,4 +25,14 @@
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/monorepo-backend:${{ github.sha }}
 
     # steps to deploy to a vm
+      - name: Set up SSH 
+        run: echo "${{ secrets.GCP_SSH_KEY }}" > private_key.pem
+             chmod 600 private_key.pem
+
+      - name: Deploy to Production vm
+        run: |
+         ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.GCP_USERNAME }}@${{ secrets.GCP_PUBLIC_IP}} << 'EOF'
+          docker run -d -p 8080:8080 sahilansarimondal/monorepo-backend:${{ github.sha }}
+             
+
      
